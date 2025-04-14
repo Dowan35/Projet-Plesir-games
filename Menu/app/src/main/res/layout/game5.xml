@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/light_blue">
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score : 0"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:id="@+id/animalImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp"
+        />
+
+
+    <GridLayout
+        android:layout_width="400dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="25dp"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <!--
+        Création des 6 boutons rectangulaires (hauteur réduite à 60dp)-->
+        <Button
+            android:id="@+id/answerButton1"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Réponse1"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/answerButton2"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Réponse2"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/answerButton3"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Réponse3"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:id="@+id/answerButton4"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Réponse4"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/feedbackText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="La réponse est ??"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
+        />
+
+</LinearLayout>

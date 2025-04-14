@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/light_blue">
+
+    <!--Titre du menu, positionné plus haut-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PL'ESIR GAME"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="32dp"/>
+
+    <!--Grille avec 2 colonnes et 3 lignes pour les 6 rectangles-->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="3"
+        android:layout_marginTop="16dp">
+
+        <!--
+        Création des 6 boutons rectangulaires (hauteur réduite à 60dp)-->
+        <Button
+            android:id="@+id/button_option1"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game1"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/button_option2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game2"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/button_option3"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game3"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/button_option4"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game4"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/button_option5"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game5"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/button_option6"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:background="@android:color/black"
+            android:gravity="center"
+            android:text="Game6"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_columnWeight="1"/>
+
+    </GridLayout>
+
+</LinearLayout>

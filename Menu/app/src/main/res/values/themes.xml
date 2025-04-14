@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Définir un thème personnalisé qui hérite de AppCompat -->
+    <style name="Theme.Menu" parent="Theme.AppCompat.Light">
+        <!-- Personnalisation du thème -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+</resources>
