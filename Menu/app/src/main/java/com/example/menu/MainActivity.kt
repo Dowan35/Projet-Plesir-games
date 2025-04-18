@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+// classe permettant d'afficher le menu d'entrainnement
 fun MenuScreen() {
     // Récupère la configuration actuelle de l'appareil
     val configuration = LocalConfiguration.current

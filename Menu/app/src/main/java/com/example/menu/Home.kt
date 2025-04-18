@@ -3,7 +3,9 @@ package com.example.menu
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.menu.utils.isSocketConnected
 
 class Home : AppCompatActivity() {
 
@@ -24,27 +26,41 @@ class Home : AppCompatActivity() {
 
         val quickPlayButton = findViewById<Button>(R.id.quickPlayButton)
         val trainingButton = findViewById<Button>(R.id.trainingButton)
+        val multiPlayerButton = findViewById<Button>(R.id.multiplayerButton)
+        val buttonParametre = findViewById<Button>(R.id.buttonParametre)
 
         quickPlayButton.setOnClickListener {
-            launchRandomGames()
+            launchRandomGames(false)
         }
-
         trainingButton.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+        multiPlayerButton.setOnClickListener {
+            if (isSocketConnected(BluetoothService.socket)) {
+                launchRandomGames(true)
+            } else {
+                Toast.makeText(this, "Veuillez d'abord vous connecter dans les paramètres", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        buttonParametre.setOnClickListener {
+            startActivity(Intent(this, Parametre::class.java))
+        }
     }
 
-    private fun launchRandomGames() {
+    private fun launchRandomGames(isMultiplayer: Boolean) {
         val selectedGames = games.shuffled().take(3)
-        startNextGame(0, selectedGames)
+        startNextGame(0, selectedGames, isMultiplayer)
     }
 
-    private fun startNextGame(index: Int, selectedGames: List<Class<*>>) {
+    private fun startNextGame(index: Int, selectedGames: List<Class<*>>, isMultiplayer: Boolean) {
         if (index >= selectedGames.size) return
 
         val intent = Intent(this, selectedGames[index])
         intent.putExtra("nextGameIndex", index + 1)
         intent.putExtra("selectedGames", selectedGames.map { it.name }.toTypedArray())
+        intent.putExtra("isMultiplayer",  isMultiplayer)
         startActivity(intent)
     }
 

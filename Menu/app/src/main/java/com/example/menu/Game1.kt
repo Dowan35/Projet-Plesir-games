@@ -11,6 +11,7 @@ class Game1 : AppCompatActivity() {
 
         val nextGameIndex = intent.getIntExtra("nextGameIndex", -1)
         val isQuickPlay = nextGameIndex != -1
+        val isMultiplayer = intent.getBooleanExtra("isMultiplayer", false)
 
         supportActionBar?.hide()
 
