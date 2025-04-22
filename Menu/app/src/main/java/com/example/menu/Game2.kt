@@ -66,6 +66,7 @@ class Game2 : AppCompatActivity(), SensorEventListener {
 
     private var mode: String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,18 +81,61 @@ class Game2 : AppCompatActivity(), SensorEventListener {
 
         setContent {
             Projet_jeu_mobileTheme {
-                if (!gameStarted) {
-                    StartScreen { startGame() }
-                } else {
-                    BottleGameScreen(
-                        shakeProgress,
-                        isExploded,
-                        vibrate,
-                        showFinalScore,
-                        elapsedTime,
-                        onReset = { resetGame() }
-                    )
-                }
+                GameScreen()
+            }
+        }
+    }
+
+    @Composable
+    fun GameScreen() {
+        // Initialiser l'état `showInstructions` ici, dans un @Composable fonction
+        var showInstructions by remember { mutableStateOf(true) }
+
+        // Si on affiche les instructions
+        if (showInstructions) {
+            InstructionScreen(onContinue = {
+                showInstructions = false
+                startGame()
+            })
+        } else if (!gameStarted) {
+            InstructionScreen {  }
+        } else {
+            BottleGameScreen(
+                shakeProgress,
+                isExploded,
+                vibrate,
+                showFinalScore,
+                elapsedTime,
+                onReset = { resetGame() }
+            )
+        }
+    }
+
+    @Composable
+    fun InstructionScreen(onContinue: () -> Unit) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)
+                .background(Color.Black),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Règles du jeu",
+                style = MaterialTheme.typography.headlineLarge,
+                color = Color.White
+            )
+
+            Text(
+                text = "Secouez votre téléphone pour augmenter la pression dans la bouteille.".trimIndent(),
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+
+            Button(onClick = onContinue) {
+                Text("Commencer")
             }
         }
     }
@@ -184,36 +228,6 @@ class Game2 : AppCompatActivity(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         sensorManager.unregisterListener(this)
-    }
-}
-
-@Composable
-fun StartScreen(onStart: () -> Unit) {
-    var countdown by remember { mutableStateOf(3) }
-    var countdownStarted by remember { mutableStateOf(false) }
-
-    LaunchedEffect(countdownStarted) {
-        if (countdownStarted) {
-            for (i in 3 downTo 1) {
-                delay(1000L)
-                countdown = i - 1
-            }
-            onStart()
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (!countdownStarted) {
-            Button(onClick = { countdownStarted = true }) {
-                Text("Commencer")
-            }
-        } else {
-            Text("Début dans $countdown...", style = MaterialTheme.typography.headlineMedium)
-        }
     }
 }
 
