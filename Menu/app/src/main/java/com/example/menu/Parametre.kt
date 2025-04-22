@@ -9,8 +9,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 
 class Parametre : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,12 +34,40 @@ fun ParametreScreen() {
     var mode by remember { mutableStateOf("") } // "host" ou "join"
     var pseudo by remember { mutableStateOf(TextFieldValue("")) }
 
+    // permet de griser un bouton si on clique sur un autre
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var hostNameState by remember { mutableStateOf("") }
+    var clientNameState by remember { mutableStateOf("") }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                // Met à jour les noms à chaque retour sur l'écran
+                hostNameState = BluetoothService.hostName
+                clientNameState = BluetoothService.clientName
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     fun openBluetoothService() {
         val intent = Intent(context, BluetoothService::class.java)
+
         intent.putExtra("mode", mode)
-        intent.putExtra("userName", pseudo.text)
+
+        val finalUserName = when (mode) {
+            "host" -> hostNameState.ifBlank { pseudo.text }
+            "join" -> clientNameState.ifBlank { pseudo.text }
+            else -> pseudo.text
+        }
+
+        intent.putExtra("userName", finalUserName)
         context.startActivity(intent)
     }
+
 
     Column(
         modifier = Modifier
@@ -47,8 +78,13 @@ fun ParametreScreen() {
         Button(
             onClick = {
                 mode = "host"
-                showDialog = true
+                if (BluetoothService.hostName.isNotBlank()) {
+                    openBluetoothService()
+                } else {
+                    showDialog = true
+                }
             },
+            enabled = clientNameState.isBlank(), // Désactivé si client actif
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Host")
@@ -59,8 +95,13 @@ fun ParametreScreen() {
         Button(
             onClick = {
                 mode = "join"
-                showDialog = true
+                if (BluetoothService.clientName.isNotBlank()) {
+                    openBluetoothService()
+                } else {
+                    showDialog = true
+                }
             },
+            enabled = hostNameState.isBlank(), // Désactivé si host actif
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Join")
@@ -68,18 +109,9 @@ fun ParametreScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-//        Button(
-//            onClick = {
-//                val intent = Intent(context, BluetoothPairingScreen::class.java)
-//                context.startActivity(intent)
-//            },
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text("Pair Device")
-//        }
     }
 
-    if (showDialog) {
+    if (showDialog) { // box de dialogue pour mettre son nom.
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text("Entrez votre pseudo :") },
@@ -96,7 +128,7 @@ fun ParametreScreen() {
                     onClick = {
                         if (pseudo.text.isNotBlank()) {
                             showDialog = false
-                            openBluetoothService()
+                            openBluetoothService() // ferme la boite et lance la fonction pour la redirection
                         }
                     }
                 ) {
