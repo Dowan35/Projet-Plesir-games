@@ -142,7 +142,7 @@ class Game2 : AppCompatActivity(), SensorEventListener {
 
     private fun calculateScore(): Float {
         return elapsedTime / 1000f
-    //return (30- shakeProgress.toInt()).coerceAtLeast(0)
+        //return (30- shakeProgress.toInt()).coerceAtLeast(0)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

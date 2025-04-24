@@ -34,6 +34,8 @@ class BluetoothService : ComponentActivity() {
     private var originalName = "" //variable pour stocker le nom original de l'appareil serveur
 
     companion object {
+        var isHosting: Boolean = false
+        var isJoining: Boolean = false
         var hostName: String = ""
         var clientName: String = ""
         var socket: BluetoothSocket? = null
@@ -81,20 +83,21 @@ class BluetoothService : ComponentActivity() {
 
     @SuppressLint("MissingPermission")
     private fun startHost() {
+        isHosting = true
         originalName = bluetoothAdapter.name
         bluetoothAdapter.name = hostName // Remplace temporairement le nom Bluetooth
 
-            setContent {
-                CommonBluetoothLayout(
-                    topContent = {
-                        Text("Serveur démarré : $hostName", style = MaterialTheme.typography.headlineMedium)
-                        Text("En attente du deuxième joueur...")
-                        CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))
-                    },
-                    bottomButtonText = "Fermer la connexion",
-                    onBottomButtonClick = { stopHost(originalName) }
-                )
-            }
+        setContent {
+            CommonBluetoothLayout(
+                topContent = {
+                    Text("Serveur démarré : $hostName", style = MaterialTheme.typography.headlineMedium)
+                    Text("En attente du deuxième joueur...")
+                    CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))
+                },
+                bottomButtonText = "Fermer la connexion",
+                onBottomButtonClick = { stopHost(originalName) }
+            )
+        }
 
         Thread {
             try {
@@ -133,6 +136,7 @@ class BluetoothService : ComponentActivity() {
     @Composable
     @SuppressLint("MissingPermission")
     private fun startClient() {
+        isJoining = true
         val isScanning = remember { mutableStateOf(true) }
 
         LaunchedEffect(Unit) {
@@ -292,6 +296,7 @@ class BluetoothService : ComponentActivity() {
     @SuppressLint("MissingPermission")
     private fun stopHost(originalName: String) {
         try {
+            isHosting = false
             socket?.close()
             inputStream?.close()
             outputStream?.close()
@@ -315,6 +320,7 @@ class BluetoothService : ComponentActivity() {
 
     private fun stopClient() {
         try {
+            isJoining = false
             socket?.close()
             inputStream?.close()
             outputStream?.close()

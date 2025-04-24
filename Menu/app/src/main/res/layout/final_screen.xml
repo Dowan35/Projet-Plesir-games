@@ -1,26 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/light_blue"
     android:padding="16dp">
 
-    <!-- Affichage du score final -->
-    <TextView
-        android:id="@+id/finalScoreTextView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Score Final: 0"
-        android:textSize="24sp"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center">
 
-    <!-- Affichage d'un message de félicitations -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Félicitations !"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp"/>
+        <!-- Score -->
+        <TextView
+            android:id="@+id/finalScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score Final: 0"
+            android:textSize="24sp" />
 
-</LinearLayout>
+        <!-- Message Félicitations -->
+        <TextView
+            android:id="@+id/nicePlayBuddy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Félicitations !"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+</FrameLayout>

@@ -38,6 +38,8 @@ fun ParametreScreen() {
     val lifecycleOwner = LocalLifecycleOwner.current
     var hostNameState by remember { mutableStateOf("") }
     var clientNameState by remember { mutableStateOf("") }
+    var isHosting by remember { mutableStateOf(false) }
+    var isJoining by remember { mutableStateOf(false) }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -45,6 +47,8 @@ fun ParametreScreen() {
                 // Met à jour les noms à chaque retour sur l'écran
                 hostNameState = BluetoothService.hostName
                 clientNameState = BluetoothService.clientName
+                isHosting = BluetoothService.isHosting
+                isJoining = BluetoothService.isJoining
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -84,7 +88,7 @@ fun ParametreScreen() {
                     showDialog = true
                 }
             },
-            enabled = clientNameState.isBlank(), // Désactivé si client actif
+            enabled = !isJoining, // Désactivé si client actif
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Host")
@@ -101,7 +105,7 @@ fun ParametreScreen() {
                     showDialog = true
                 }
             },
-            enabled = hostNameState.isBlank(), // Désactivé si host actif
+            enabled = !isHosting, // Désactivé si host actif
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Join")

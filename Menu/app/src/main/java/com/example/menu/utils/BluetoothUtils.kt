@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.compose.material3.*
-import com.example.menu.BluetoothService
+import com.example.menu.BluetoothService.Companion.inputStream
+import com.example.menu.BluetoothService.Companion.isHosting
+import com.example.menu.BluetoothService.Companion.isJoining
+import com.example.menu.BluetoothService.Companion.outputStream
+import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * Vérifie si toutes les permissions Bluetooth nécessaires sont accordées.
@@ -107,5 +113,70 @@ fun isSocketConnected(socket : BluetoothSocket?): Boolean {
         false
     }
 }
+// Fonction utilitaire pour ecrire un message texte
+fun sendMessage(msg: String, outputStream: OutputStream?) {
+    try {
+        outputStream?.write(msg.toByteArray())
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+object MessageBuffer {
+    var buffer = ""
+}
+
+// Fonction utilitaire pour lire un message texte (bloquante)
+fun receiveMessage(inputStream: InputStream?): String? {
+    return try {
+        val buffer = ByteArray(1024)//init d'un buffer juste pour un message
+        val builder = StringBuilder(MessageBuffer.buffer)// memoire tampon
+
+        while (!builder.contains(";")) {//recupere le contenu
+            val bytes = inputStream?.read(buffer) ?: break
+            val raw = buffer.decodeToString(0, bytes)
+                .filter { it.code in 32..126 || it == ';' }
+
+            builder.append(raw)
+        }
+
+        val fullMessage = builder.toString()
+        val split = fullMessage.split(";", limit = 2)
+
+        val message = split.getOrNull(0)//?.plus(";")
+        MessageBuffer.buffer = split.getOrNull(1) ?: "" // stocker ce qu’il reste pour plus tard
+
+        return message
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+fun waitForBothReady(message : String): Boolean {
+    var receivedReady = false
+    var sentReady = false
+
+    if (isJoining) {
+        sendMessage(message, outputStream)
+        Log.d("Home, client", "Envoi de $message")
+        sentReady = true
+        val msg = receiveMessage(inputStream)
+        Log.d("Home, client", "reception de $msg")
+        receivedReady = msg?.trimEnd(';') == message.trimEnd(';')
+    } else if (isHosting){
+        val msg = receiveMessage(inputStream)
+        Log.d("Home, serveur", "reception de $msg")
+        receivedReady = msg?.trimEnd(';') == message.trimEnd(';')
+        sendMessage(message, outputStream)
+        Log.d("Home, serveur", "Envoi de $message")
+        sentReady = true
+    }
+
+    return sentReady && receivedReady
+}
+
+
+
 
 

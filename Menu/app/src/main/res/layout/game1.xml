@@ -1,26 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Layout d’introduction avec bouton "Commencer" -->
+    <!-- layout d’intro -->
     <LinearLayout
         android:id="@+id/introLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@android:color/transparent">
 
         <TextView
             android:id="@+id/instructionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Évite les obstacles en bougeant la balle de gauche à droite !"
+            android:text="Évite les obstacles !"
             android:textSize="18sp"
             android:layout_marginBottom="24dp"/>
 
@@ -31,15 +30,16 @@
             android:text="Commencer"/>
     </LinearLayout>
 
-    <!-- Layout principal du jeu (invisible au départ) -->
+    <!-- layout principal du jeu -->
     <LinearLayout
         android:id="@+id/gameLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:visibility="gone"
+        android:background="@android:color/transparent">
 
         <TextView
             android:id="@+id/scoreTextView"
@@ -48,7 +48,7 @@
             android:text="Score: 0"
             android:textSize="20sp"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="36dp"/>
 
         <com.example.menu.GameView
             android:id="@+id/gameView"
@@ -56,4 +56,25 @@
             android:layout_height="400dp"
             android:background="@android:color/darker_gray"/>
     </LinearLayout>
-</LinearLayout>
+
+    <!-- layout d’affichage des scores -->
+    <LinearLayout
+        android:id="@+id/endLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#AAFFFFFF"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/multiplayerScoreText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score final"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="20dp"/>
+    </LinearLayout>
+
+</FrameLayout>
